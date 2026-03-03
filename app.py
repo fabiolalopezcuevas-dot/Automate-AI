@@ -5,8 +5,10 @@ from openai import OpenAI
 
 app = Flask(__name__)
 
+# Cliente OpenAI
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
+# Plantilla de prompt
 PROMPT_TEMPLATE = """
 Eres un asistente de auditoría interna experto en ciberseguridad.
 Recibirás:
@@ -35,6 +37,12 @@ Salida JSON:
 }
 """
 
+# Ruta principal
+@app.route("/", methods=["GET"])
+def home():
+    return "API de auditoría AI funcionando. Usa el endpoint /generar para POST."
+
+# Endpoint para generar hallazgo y anexo
 @app.route("/generar", methods=["POST"])
 def generar():
     data = request.json
@@ -68,10 +76,7 @@ def generar():
         "anexo": anexo
     })
 
+# Ejecutar app
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
-
     app.run(host="0.0.0.0", port=port)
-  @app.route("/", methods=["GET"])
-def home():
-    return "API de auditoría AI funcionando. Usa el endpoint /generar para POST."
